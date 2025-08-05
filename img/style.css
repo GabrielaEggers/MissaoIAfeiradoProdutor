@@ -1,42 +1,242 @@
-/* IMAGENS (adicionar isso no CSS) */
-.visualizador-img {
+:root {
+    --roxo: #6a1b9a;
+    --amarelo: #ffeb3b;
+    --verde: #4caf50;
+    --vermelho: #f44336;
+    --azul: #2196f3;
+    --fundo: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --texto-escuro: #2d3436;
+    --texto-claro: #f5f6fa;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background: var(--fundo);
+    color: var(--texto-escuro);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.cabecalho {
+    background: var(--roxo);
+    color: var(--amarelo);
+    padding: 25px;
+    text-align: center;
+}
+
+.cabecalho h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.2rem;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+}
+
+.subtitulo {
+    color: var(--texto-claro);
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.conteudo {
+    padding: 25px;
+}
+
+.painel-controle {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.selecao-produto {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+select {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid var(--roxo);
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--texto-escuro);
+}
+
+.visualizador {
     width: 80px;
     height: 80px;
-    margin: 10px auto;
-    border-radius: 50%; /* Deixa redondo! */
-    overflow: hidden;
-    border: 2px solid #4CAF50;
-    background: #f8f8f8;
+    border-radius: 50%;
+    background: #f5f5f5;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    border: 3px solid var(--azul);
 }
 
-#img-produto {
+.visualizador img {
     max-width: 100%;
     max-height: 100%;
-    display: block; /* Isso faz a imagem aparecer! */
+    object-fit: contain;
 }
 
-/* ESTOQUE (cálculo corrigido) */
-#lista-produtos {
+.operacoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.entrada, .saida {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.entrada {
+    border-top: 5px solid var(--verde);
+}
+
+.saida {
+    border-top: 5px solid var(--vermelho);
+}
+
+h2, h3 {
+    color: var(--roxo);
+    margin-bottom: 15px;
+    font-family: 'Poppins', sans-serif;
+}
+
+h3 {
+    font-size: 1.1rem;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+
+.btn-verde {
+    background: var(--verde);
+    color: white;
+}
+
+.btn-vermelho {
+    background: var(--vermelho);
+    color: white;
+}
+
+.painel-estoque {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.lista-estoque {
     margin-top: 15px;
 }
 
-.produto-item {
+.item-estoque {
     display: flex;
     align-items: center;
-    padding: 10px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    margin-bottom: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #f5f5f5;
+    border-radius: 10px;
+    border-left: 5px solid var(--azul);
 }
 
-.produto-item img {
+.item-estoque img {
     width: 50px;
     height: 50px;
-    object-fit: cover;
-    border-radius: 50%;
+    object-fit: contain;
     margin-right: 15px;
-    border: 1px solid #ddd;
+    border-radius: 50%;
+    background: white;
+    padding: 5px;
+}
+
+.info-produto {
+    flex: 1;
+}
+
+.info-produto h3 {
+    color: var(--roxo);
+    margin-bottom: 5px;
+}
+
+.detalhes {
+    display: flex;
+    gap: 15px;
+    font-size: 0.9rem;
+}
+
+.resumo {
+    text-align: right;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px dashed var(--roxo);
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: var(--roxo);
+}
+
+#valor-total {
+    color: var(--verde);
+    font-size: 1.4rem;
+}
+
+@media (max-width: 768px) {
+    .operacoes {
+        grid-template-columns: 1fr;
+    }
+    
+    .selecao-produto {
+        flex-direction: column;
+    }
+    
+    .visualizador {
+        width: 100px;
+        height: 100px;
+    }
 }

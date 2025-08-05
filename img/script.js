@@ -1,26 +1,106 @@
 document.addEventListener('DOMContentLoaded', () => {
     const estoque = [];
-    const imgProduto = document.getElementById('img-produto'); // Imagem principal
+    const visualizador = document.getElementById('visualizador-imagem');
 
-    // ATUALIZA ESTOQUE (cálculo corrigido)
-    function atualizarEstoque() {
-        const lista = document.getElementById('lista-produtos');
-        let total = 0;
+    // Carrega imagem do produto selecionado
+    document.getElementById('seletor-produto').addEventListener('change', function() {
+        visualizador.innerHTML = '';
         
-        lista.innerHTML = ''; // Limpa a lista
+        if (this.value) {
+            const img = document.createElement('img');
+            img.src = `img/${this.value}.png`;
+            img.alt = `Imagem de ${this.value}`;
+            img.onerror = () => {
+                visualizador.innerHTML = '📦';
+                console.error(`Imagem não encontrada: img/${this.value}.png`);
+            };
+            visualizador.appendChild(img);
+        }
+    });
 
-        estoque.forEach(produto => {
-            const valorItem = produto.quantidade * produto.preco;
+    // Registrar ENTRADA
+    document.getElementById('btn-entrada').addEventListener('click', () => {
+        const produto = document.getElementById('seletor-produto').value;
+        const quantidade = parseFloat(document.getElementById('quantidade-entrada').value);
+        const preco = parseFloat(document.getElementById('preco-entrada').value);
+
+        if (!produto || isNaN(quantidade) || quantidade <= 0 || isNaN(preco) || preco <= 0) {
+            alert('Preencha todos os campos da ENTRADA corretamente!');
+            return;
+        }
+
+        const index = estoque.findIndex(item => item.nome === produto);
+
+        if (index !== -1) {
+            // Atualiza produto existente
+            estoque[index].quantidade += quantidade;
+            estoque[index].preco = preco; // Atualiza preço
+        } else {
+            // Adiciona novo produto
+            estoque.push({
+                nome: produto,
+                quantidade: quantidade,
+                preco: preco
+            });
+        }
+
+        atualizarEstoque();
+        limparCampos('entrada');
+    });
+
+    // Registrar SAÍDA
+    document.getElementById('btn-saida').addEventListener('click', () => {
+        const produto = document.getElementById('seletor-produto').value;
+        const quantidade = parseFloat(document.getElementById('quantidade-saida').value);
+
+        if (!produto || isNaN(quantidade) || quantidade <= 0) {
+            alert('Preencha todos os campos da SAÍDA corretamente!');
+            return;
+        }
+
+        const index = estoque.findIndex(item => item.nome === produto);
+
+        if (index === -1) {
+            alert('Produto não encontrado no estoque!');
+            return;
+        }
+
+        if (estoque[index].quantidade < quantidade) {
+            alert('Quantidade insuficiente em estoque!');
+            return;
+        }
+
+        estoque[index].quantidade -= quantidade;
+        
+        if (estoque[index].quantidade === 0) {
+            estoque.splice(index, 1); // Remove se zerar
+        }
+
+        atualizarEstoque();
+        limparCampos('saida');
+    });
+
+    // Atualiza a exibição do estoque
+    function atualizarEstoque() {
+        const lista = document.getElementById('lista-estoque');
+        let total = 0;
+
+        lista.innerHTML = '';
+
+        estoque.forEach(item => {
+            const valorItem = item.quantidade * item.preco;
             total += valorItem;
 
             lista.innerHTML += `
-                <div class="produto-item">
-                    <img src="img/${produto.nome}.jpg" alt="${produto.nome}" 
-                         onerror="this.src='img/sem-foto.jpg'">
-                    <div>
-                        <h3>${produto.nome.toUpperCase()}</h3>
-                        <p>${produto.quantidade}kg × R$${produto.preco.toFixed(2)} = 
-                        <strong>R$${valorItem.toFixed(2)}</strong></p>
+                <div class="item-estoque">
+                    <img src="img/${item.nome}.png" alt="${item.nome}" onerror="this.src='img/sem-foto.png'">
+                    <div class="info-produto">
+                        <h3>${formatarNome(item.nome)}</h3>
+                        <div class="detalhes">
+                            <span>${item.quantidade} kg</span>
+                            <span>R$ ${item.preco.toFixed(2)}/kg</span>
+                            <span>Total: R$ ${valorItem.toFixed(2)}</span>
+                        </div>
                     </div>
                 </div>
             `;
@@ -29,38 +109,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('valor-total').textContent = total.toFixed(2);
     }
 
-    // MOSTRA IMAGEM (100% funcional)
-    document.getElementById('seletor').addEventListener('change', function() {
-        if (this.value) {
-            imgProduto.src = `img/${this.value}.jpg`;
-            imgProduto.style.display = 'block';
-            imgProduto.onerror = () => {
-                imgProduto.style.display = 'none';
-                document.getElementById('visualizador').innerHTML = '🛒';
-            };
+    function limparCampos(tipo) {
+        if (tipo === 'entrada') {
+            document.getElementById('quantidade-entrada').value = '';
+            document.getElementById('preco-entrada').value = '';
         } else {
-            imgProduto.style.display = 'none';
+            document.getElementById('quantidade-saida').value = '';
         }
-    });
+    }
 
-    // BOTÃO ADICIONAR (cálculo garantido)
-    document.getElementById('botao-adicionar').addEventListener('click', () => {
-        const nome = document.getElementById('seletor').value;
-        const qtd = parseFloat(document.getElementById('quantidade').value);
-        const preco = parseFloat(document.getElementById('preco').value);
-
-        if (nome && qtd > 0 && preco > 0) {
-            const index = estoque.findIndex(item => item.nome === nome);
-            
-            if (index >= 0) {
-                estoque[index] = { nome, quantidade: qtd, preco }; // Atualiza
-            } else {
-                estoque.push({ nome, quantidade: qtd, preco }); // Adiciona novo
-            }
-
-            atualizarEstoque();
-        } else {
-            alert("Preencha todos os campos corretamente!");
-        }
-    });
+    function formatarNome(nome) {
+        return nome.charAt(0).toUpperCase() + nome.slice(1);
+    }
 });
