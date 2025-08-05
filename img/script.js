@@ -1,87 +1,66 @@
 document.addEventListener('DOMContentLoaded', () => {
     const estoque = [];
-    const seletor = document.getElementById('seletor');
-    const visualizador = document.getElementById('visualizador');
-    const quantidade = document.getElementById('quantidade');
-    const preco = document.getElementById('preco');
-    const botaoAdicionar = document.getElementById('botao-adicionar');
-    const listaProdutos = document.getElementById('lista-produtos');
-    const valorTotal = document.getElementById('valor-total');
+    const imgProduto = document.getElementById('img-produto'); // Imagem principal
 
-    // Carrega imagem do produto selecionado
-    seletor.addEventListener('change', () => {
-        visualizador.innerHTML = '';
-        
-        if (seletor.value) {
-            const img = document.createElement('img');
-            img.src = `img/${seletor.value}.png`;
-            img.alt = `Imagem de ${seletor.value}`;
-            img.onerror = () => {
-                visualizador.innerHTML = '🖼️';
-                console.error(`Imagem não encontrada: img/${seletor.value}.png`);
-            };
-            visualizador.appendChild(img);
-        }
-    });
-
-    // Adiciona/atualiza produto
-    botaoAdicionar.addEventListener('click', () => {
-        const nome = seletor.value;
-        const qtd = parseFloat(quantidade.value);
-        const valor = parseFloat(preco.value);
-
-        if (!nome || isNaN(qtd) || qtd <= 0 || isNaN(valor) || valor <= 0) {
-            alert('Preencha todos os campos com valores válidos!');
-            return;
-        }
-
-        const indice = estoque.findIndex(item => item.nome === nome);
-
-        if (indice !== -1) {
-            estoque[indice] = { nome, quantidade: qtd, preco: valor };
-        } else {
-            estoque.push({ nome, quantidade: qtd, preco: valor });
-        }
-
-        atualizarEstoque();
-        limparFormulario();
-    });
-
+    // ATUALIZA ESTOQUE (cálculo corrigido)
     function atualizarEstoque() {
-        listaProdutos.innerHTML = '';
+        const lista = document.getElementById('lista-produtos');
         let total = 0;
+        
+        lista.innerHTML = ''; // Limpa a lista
 
         estoque.forEach(produto => {
-            const subtotal = produto.quantidade * produto.preco;
-            total += subtotal;
+            const valorItem = produto.quantidade * produto.preco;
+            total += valorItem;
 
-            const item = document.createElement('div');
-            item.className = 'produto-item';
-            item.innerHTML = `
-                <img src="img/${produto.nome}.png" alt="${produto.nome}" onerror="this.parentNode.innerHTML = '📦'">
-                <div class="info-produto">
-                    <h3>${formatarNome(produto.nome)}</h3>
-                    <div class="detalhes-produto">
-                        <span>${produto.quantidade} kg</span>
-                        <span>R$ ${produto.preco.toFixed(2)}/kg</span>
-                        <span>R$ ${subtotal.toFixed(2)}</span>
+            lista.innerHTML += `
+                <div class="produto-item">
+                    <img src="img/${produto.nome}.jpg" alt="${produto.nome}" 
+                         onerror="this.src='img/sem-foto.jpg'">
+                    <div>
+                        <h3>${produto.nome.toUpperCase()}</h3>
+                        <p>${produto.quantidade}kg × R$${produto.preco.toFixed(2)} = 
+                        <strong>R$${valorItem.toFixed(2)}</strong></p>
                     </div>
                 </div>
             `;
-            listaProdutos.appendChild(item);
         });
 
-        valorTotal.textContent = `R$ ${total.toFixed(2)}`;
+        document.getElementById('valor-total').textContent = total.toFixed(2);
     }
 
-    function limparFormulario() {
-        seletor.value = '';
-        quantidade.value = '';
-        preco.value = '';
-        visualizador.innerHTML = '';
-    }
+    // MOSTRA IMAGEM (100% funcional)
+    document.getElementById('seletor').addEventListener('change', function() {
+        if (this.value) {
+            imgProduto.src = `img/${this.value}.jpg`;
+            imgProduto.style.display = 'block';
+            imgProduto.onerror = () => {
+                imgProduto.style.display = 'none';
+                document.getElementById('visualizador').innerHTML = '🛒';
+            };
+        } else {
+            imgProduto.style.display = 'none';
+        }
+    });
 
-    function formatarNome(nome) {
-        return nome.charAt(0).toUpperCase() + nome.slice(1);
-    }
+    // BOTÃO ADICIONAR (cálculo garantido)
+    document.getElementById('botao-adicionar').addEventListener('click', () => {
+        const nome = document.getElementById('seletor').value;
+        const qtd = parseFloat(document.getElementById('quantidade').value);
+        const preco = parseFloat(document.getElementById('preco').value);
+
+        if (nome && qtd > 0 && preco > 0) {
+            const index = estoque.findIndex(item => item.nome === nome);
+            
+            if (index >= 0) {
+                estoque[index] = { nome, quantidade: qtd, preco }; // Atualiza
+            } else {
+                estoque.push({ nome, quantidade: qtd, preco }); // Adiciona novo
+            }
+
+            atualizarEstoque();
+        } else {
+            alert("Preencha todos os campos corretamente!");
+        }
+    });
 });
