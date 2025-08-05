@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feira Moderna - Controle</title>
+    <link rel="stylesheet" href="estilo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <header class="cabecalho">
+            <img src="img/icone-cesta.png" alt="Cesta" class="icone">
+            <h1>Controle da Feira</h1>
+        </header>
+
+        <main class="conteudo">
+            <section class="painel-entrada">
+                <h2>🛒 Adicionar Produto</h2>
+                <div class="seletor-produto">
+                    <select id="seletor">
+                        <option value="">-- Escolha --</option>
+                        <option value="tomate">Tomate</option>
+                        <option value="cebola">Cebola</option>
+                        <option value="cenoura">Cenoura</option>
+                        <option value="quiabo">Quiabo</option>
+                        <option value="mandioca">Mandioca</option>
+                    </select>
+                    <div class="visualizacao-imagem" id="visualizador"></div>
+                </div>
+
+                <div class="controles">
+                    <input type="number" id="quantidade" placeholder="Qtd (kg)" min="0.1" step="0.1">
+                    <input type="number" id="preco" placeholder="R$/kg" min="0.01" step="0.01">
+                    <button id="botao-adicionar">➕ Atualizar</button>
+                </div>
+            </section>
+
+            <section class="painel-estoque">
+                <h2>📦 Estoque</h2>
+                <div id="lista-produtos" class="lista-produtos"></div>
+                <div class="resumo">
+                    <p>Total em estoque: <span id="valor-total">R$ 0,00</span></p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="codigo.js"></script>
+</body>
+</html>
