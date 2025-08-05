@@ -3,62 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feira Tech - Controle</title>
-    <link rel="stylesheet" href="estilo.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <title>Controle Feira do Produtor</title>
+    <link rel="stylesheet" href="https://gabrielaeggers.github.io/MissaoIAfeiradoProdutor/style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🛒 FEIRA TECH</h1>
-            <p class="subtitulo">Controle de Entrada/Saída</p>
+            <h1>🛒 CONTROLE FEIRA DO PRODUTOR</h1>
+            <p class="subtitulo">Entrada • Saída • Estoque</p>
         </header>
 
         <main>
             <section class="painel-controle">
-                <div class="card">
-                    <h2>📦 Controle de Estoque</h2>
-                    
-                    <div class="seletor-produto">
-                        <select id="seletor">
-                            <option value="">-- Selecione --</option>
-                            <option value="tomate">🍅 Tomate</option>
-                            <option value="cebola">🧅 Cebola</option>
-                            <option value="cenoura">🥕 Cenoura</option>
-                            <option value="quiabo">🌱 Quiabo</option>
-                            <option value="mandioca">🍠 Mandioca</option>
-                        </select>
-                        <div id="visualizador-img"></div>
-                    </div>
-
-                    <div class="botoes-controle">
-                        <div class="entrada">
-                            <h3>➕ ENTRADA</h3>
-                            <input type="number" id="qtd-entrada" placeholder="Qtd (kg)" min="0.1" step="0.1">
-                            <input type="number" id="preco" placeholder="R$/kg" min="0.01" step="0.01">
-                            <button id="btn-entrada" class="verde">Registrar</button>
-                        </div>
-
-                        <div class="saida">
-                            <h3>➖ SAÍDA</h3>
-                            <input type="number" id="qtd-saida" placeholder="Qtd (kg)" min="0.1" step="0.1">
-                            <button id="btn-saida" class="vermelho">Retirar</button>
-                        </div>
-                    </div>
+                <div class="selecao-produto">
+                    <select id="seletor-produto">
+                        <option value="">-- Selecione --</option>
+                        <option value="tomate">🍅 Tomate</option>
+                        <option value="cebola">🧅 Cebola</option>
+                        <option value="cenoura">🥕 Cenoura</option>
+                        <option value="quiabo">🌱 Quiabo</option>
+                        <option value="mandioca">🍠 Mandioca</option>
+                    </select>
+                    <div id="visualizador-img"></div>
                 </div>
 
-                <div class="card">
-                    <h2>📊 Estoque Atual</h2>
-                    <div id="lista-estoque"></div>
-                    <div class="total">
-                        <span>TOTAL:</span>
-                        <strong id="valor-total">R$ 0,00</strong>
+                <div class="operacoes">
+                    <div class="entrada">
+                        <h3>➕ ENTRADA</h3>
+                        <input type="number" id="qtd-entrada" placeholder="Qtd (kg)" min="0.1" step="0.1">
+                        <input type="number" id="preco" placeholder="R$/kg" min="0.01" step="0.01">
+                        <button id="btn-entrada" class="btn-verde">Registrar</button>
                     </div>
+
+                    <div class="saida">
+                        <h3>➖ SAÍDA</h3>
+                        <input type="number" id="qtd-saida" placeholder="Qtd (kg)" min="0.1" step="0.1">
+                        <button id="btn-saida" class="btn-vermelho">Retirar</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="painel-estoque">
+                <h2>📊 ESTOQUE ATUAL</h2>
+                <div id="lista-estoque"></div>
+                <div class="resumo">
+                    <p>VALOR TOTAL: <span id="valor-total">R$ 0,00</span></p>
                 </div>
             </section>
         </main>
     </div>
 
-    <script src="codigo.js"></script>
+    <script src="https://gabrielaeggers.github.io/MissaoIAfeiradoProdutor/script.js"></script>
 </body>
 </html>
